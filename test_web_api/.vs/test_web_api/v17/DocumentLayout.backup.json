@@ -1,0 +1,235 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\projects\\_test\\test_web_api\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{9EC025DA-BA4F-41EA-94CC-9BD8F6337F80}|test_web_api.csproj|d:\\projects\\_test\\test_web_api\\services\\productservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9EC025DA-BA4F-41EA-94CC-9BD8F6337F80}|test_web_api.csproj|solutionrelative:services\\productservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EC025DA-BA4F-41EA-94CC-9BD8F6337F80}|test_web_api.csproj|d:\\projects\\_test\\test_web_api\\repositories\\productrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9EC025DA-BA4F-41EA-94CC-9BD8F6337F80}|test_web_api.csproj|solutionrelative:repositories\\productrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EC025DA-BA4F-41EA-94CC-9BD8F6337F80}|test_web_api.csproj|d:\\projects\\_test\\test_web_api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9EC025DA-BA4F-41EA-94CC-9BD8F6337F80}|test_web_api.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EC025DA-BA4F-41EA-94CC-9BD8F6337F80}|test_web_api.csproj|d:\\projects\\_test\\test_web_api\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9EC025DA-BA4F-41EA-94CC-9BD8F6337F80}|test_web_api.csproj|solutionrelative:repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EC025DA-BA4F-41EA-94CC-9BD8F6337F80}|test_web_api.csproj|d:\\projects\\_test\\test_web_api\\repositories\\iproductpricerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9EC025DA-BA4F-41EA-94CC-9BD8F6337F80}|test_web_api.csproj|solutionrelative:repositories\\iproductpricerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EC025DA-BA4F-41EA-94CC-9BD8F6337F80}|test_web_api.csproj|d:\\projects\\_test\\test_web_api\\services\\productpriceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9EC025DA-BA4F-41EA-94CC-9BD8F6337F80}|test_web_api.csproj|solutionrelative:services\\productpriceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EC025DA-BA4F-41EA-94CC-9BD8F6337F80}|test_web_api.csproj|d:\\projects\\_test\\test_web_api\\services\\iproductpriceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9EC025DA-BA4F-41EA-94CC-9BD8F6337F80}|test_web_api.csproj|solutionrelative:services\\iproductpriceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EC025DA-BA4F-41EA-94CC-9BD8F6337F80}|test_web_api.csproj|d:\\projects\\_test\\test_web_api\\services\\iproductservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9EC025DA-BA4F-41EA-94CC-9BD8F6337F80}|test_web_api.csproj|solutionrelative:services\\iproductservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EC025DA-BA4F-41EA-94CC-9BD8F6337F80}|test_web_api.csproj|d:\\projects\\_test\\test_web_api\\repositories\\productpricerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9EC025DA-BA4F-41EA-94CC-9BD8F6337F80}|test_web_api.csproj|solutionrelative:repositories\\productpricerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EC025DA-BA4F-41EA-94CC-9BD8F6337F80}|test_web_api.csproj|d:\\projects\\_test\\test_web_api\\data\\mydbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9EC025DA-BA4F-41EA-94CC-9BD8F6337F80}|test_web_api.csproj|solutionrelative:data\\mydbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EC025DA-BA4F-41EA-94CC-9BD8F6337F80}|test_web_api.csproj|d:\\projects\\_test\\test_web_api\\controllers\\productscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9EC025DA-BA4F-41EA-94CC-9BD8F6337F80}|test_web_api.csproj|solutionrelative:controllers\\productscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 231,
+          "SelectedChildIndex": 17,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:131:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:132:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:133:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:134:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:135:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UserRepository.cs",
+              "DocumentMoniker": "D:\\projects\\_test\\test_web_api\\Repositories\\UserRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\UserRepository.cs",
+              "ToolTip": "D:\\projects\\_test\\test_web_api\\Repositories\\UserRepository.cs",
+              "RelativeToolTip": "Repositories\\UserRepository.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAA1wBUAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T09:28:45.863Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "IProductPriceService.cs",
+              "DocumentMoniker": "D:\\projects\\_test\\test_web_api\\Services\\IProductPriceService.cs",
+              "RelativeDocumentMoniker": "Services\\IProductPriceService.cs",
+              "ToolTip": "D:\\projects\\_test\\test_web_api\\Services\\IProductPriceService.cs",
+              "RelativeToolTip": "Services\\IProductPriceService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAABIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T08:55:31.07Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "IProductPriceRepository.cs",
+              "DocumentMoniker": "D:\\projects\\_test\\test_web_api\\Repositories\\IProductPriceRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\IProductPriceRepository.cs",
+              "ToolTip": "D:\\projects\\_test\\test_web_api\\Repositories\\IProductPriceRepository.cs",
+              "RelativeToolTip": "Repositories\\IProductPriceRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAcAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T08:51:02.339Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "MyDBContext.cs",
+              "DocumentMoniker": "D:\\projects\\_test\\test_web_api\\Data\\MyDBContext.cs",
+              "RelativeDocumentMoniker": "Data\\MyDBContext.cs",
+              "ToolTip": "D:\\projects\\_test\\test_web_api\\Data\\MyDBContext.cs",
+              "RelativeToolTip": "Data\\MyDBContext.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAowDAAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T08:43:04.096Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ProductPriceService.cs",
+              "DocumentMoniker": "D:\\projects\\_test\\test_web_api\\Services\\ProductPriceService.cs",
+              "RelativeDocumentMoniker": "Services\\ProductPriceService.cs",
+              "ToolTip": "D:\\projects\\_test\\test_web_api\\Services\\ProductPriceService.cs",
+              "RelativeToolTip": "Services\\ProductPriceService.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAA8AAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T06:43:08.324Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ProductPriceRepository.cs",
+              "DocumentMoniker": "D:\\projects\\_test\\test_web_api\\Repositories\\ProductPriceRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\ProductPriceRepository.cs",
+              "ToolTip": "D:\\projects\\_test\\test_web_api\\Repositories\\ProductPriceRepository.cs",
+              "RelativeToolTip": "Repositories\\ProductPriceRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAABLAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T06:42:50.263Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ProductRepository.cs",
+              "DocumentMoniker": "D:\\projects\\_test\\test_web_api\\Repositories\\ProductRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\ProductRepository.cs",
+              "ToolTip": "D:\\projects\\_test\\test_web_api\\Repositories\\ProductRepository.cs",
+              "RelativeToolTip": "Repositories\\ProductRepository.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAgwC8AAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T03:58:48.913Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\projects\\_test\\test_web_api\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\projects\\_test\\test_web_api\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABAAAABIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T03:39:59.767Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ProductsController.cs",
+              "DocumentMoniker": "D:\\projects\\_test\\test_web_api\\Controllers\\ProductsController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ProductsController.cs",
+              "ToolTip": "D:\\projects\\_test\\test_web_api\\Controllers\\ProductsController.cs",
+              "RelativeToolTip": "Controllers\\ProductsController.cs",
+              "ViewState": "AgIAADEAAAAAAAAAAAAkwDoAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T02:55:13.128Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "IProductService.cs",
+              "DocumentMoniker": "D:\\projects\\_test\\test_web_api\\Services\\IProductService.cs",
+              "RelativeDocumentMoniker": "Services\\IProductService.cs",
+              "ToolTip": "D:\\projects\\_test\\test_web_api\\Services\\IProductService.cs",
+              "RelativeToolTip": "Services\\IProductService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T02:55:33.474Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ProductService.cs",
+              "DocumentMoniker": "D:\\projects\\_test\\test_web_api\\Services\\ProductService.cs",
+              "RelativeDocumentMoniker": "Services\\ProductService.cs",
+              "ToolTip": "D:\\projects\\_test\\test_web_api\\Services\\ProductService.cs",
+              "RelativeToolTip": "Services\\ProductService.cs",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAuwGMAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T02:25:19.952Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

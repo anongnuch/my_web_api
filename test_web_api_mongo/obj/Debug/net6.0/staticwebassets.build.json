@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "vIO5WN9zO7U7tLtJVv9rg8sehjHYyQQR8xHOPf+m7e4=",
+  "Source": "test_web_api_mongo",
+  "BasePath": "_content/test_web_api_mongo",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

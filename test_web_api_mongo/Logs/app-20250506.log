@@ -1,0 +1,7 @@
+2025-05-06 13:36:37.303 +07:00 [INFO] GET product by id at "2025-05-06T06:36:37.2967390Z"
+2025-05-06 13:37:47.899 +07:00 [INFO] GET product by id at "2025-05-06T06:37:47.8928486Z"
+2025-05-06 13:40:54.753 +07:00 [INFO] GET products at "2025-05-06T06:40:54.7378359Z"
+2025-05-06 13:40:54.788 +07:00 [INFO] This is an information message
+2025-05-06 13:40:54.789 +07:00 [WARN] This is a warning message
+2025-05-06 13:40:54.789 +07:00 [EROR] This is an error message
+2025-05-06 13:40:54.789 +07:00 [FATL] This is a critical message

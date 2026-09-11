@@ -1,0 +1,10 @@
+2025-04-23 15:19:24.257 +07:00 [INF] GET products at "2025-04-23T08:19:24.2518606Z"
+2025-04-23 15:19:24.288 +07:00 [INF] This is an information message
+2025-04-23 15:19:24.288 +07:00 [WRN] This is a warning message
+2025-04-23 15:19:24.288 +07:00 [ERR] This is an error message
+2025-04-23 15:19:24.288 +07:00 [FTL] This is a critical message
+2025-04-23 15:40:53.232 +07:00 [INFO] GET products at "2025-04-23T08:40:53.2262101Z"
+2025-04-23 15:40:53.276 +07:00 [INFO] This is an information message
+2025-04-23 15:40:53.281 +07:00 [WARN] This is a warning message
+2025-04-23 15:40:53.281 +07:00 [EROR] This is an error message
+2025-04-23 15:40:53.281 +07:00 [FATL] This is a critical message
