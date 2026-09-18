@@ -7,3 +7,15 @@ plan/
 
 # Hook event logs may contain sensitive tool input data (file contents, command args)
 .claude/hooks/logs/
+
+# .NET build output
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+TestResults/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
