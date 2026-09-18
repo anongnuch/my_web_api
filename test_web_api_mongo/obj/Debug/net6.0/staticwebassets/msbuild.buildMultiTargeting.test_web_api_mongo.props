@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\test_web_api_mongo.props" />
-</Project>
