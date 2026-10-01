@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>แผนที่น้ำ</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <style>
+    :root {
+      --normal: #2e9e5b;
+      --warning: #e8a317;
+      --critical: #d63a3a;
+      --stale: #9aa0a6;
+      --rain: #2f7ed8;
+      --road: #6a3fc8;
+      --panel-bg: rgba(255, 255, 255, 0.96);
+      --text: #1f2328;
+      --muted: #5f6368;
+    }
+    html, body { margin: 0; height: 100%; font-family: system-ui, "Segoe UI", Tahoma, sans-serif; color: var(--text); background: #e8e8e8; }
+    #map { position: absolute; inset: 0; }
+    .panel {
+      position: absolute; z-index: 1000; top: 12px; left: 12px; width: 320px; max-height: calc(100% - 24px);
+      overflow-y: auto; box-sizing: border-box;
+      background: var(--panel-bg); border-radius: 10px; padding: 12px 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.2); font-size: 13px;
+    }
+    .panel h1 { font-size: 16px; margin: 0 0 4px; }
+    .panel .meta { color: var(--muted); margin-bottom: 8px; line-height: 1.5; }
+    .panel label { display: flex; align-items: center; gap: 6px; margin: 4px 0; cursor: pointer; }
+    .section { margin-top: 8px; border-top: 1px solid #ddd; padding-top: 8px; }
+    .section > b { display: block; margin-bottom: 4px; }
+    .legend div { display: flex; align-items: center; gap: 6px; margin: 3px 0; }
+    .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; flex: none; border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.3); }
+    .sq { width: 11px; height: 11px; display: inline-block; flex: none; transform: rotate(45deg); border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.3); }
+    .road-icon {
+      display: inline-flex; align-items: center; justify-content: center; flex: none;
+      min-width: 20px; height: 16px; padding: 0 3px; box-sizing: border-box; border-radius: 4px;
+      border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.4);
+      color: #fff; font: 700 10px/1 system-ui, sans-serif;
+    }
+    .list { max-height: 220px; overflow-y: auto; }
+    .list a { display: flex; align-items: center; gap: 6px; color: inherit; text-decoration: none; padding: 3px 0; }
+    .list a:hover { text-decoration: underline; }
+    .list small { color: var(--muted); }
+    .list .depth { margin-left: auto; font-weight: 700; white-space: nowrap; }
+    .empty, .more { color: var(--muted); }
+    .panel select { width: 100%; padding: 5px 6px; font: inherit; margin-bottom: 4px; border: 1px solid #ccc; border-radius: 6px; background: #fff; color: inherit; }
+    .err { color: var(--critical); margin-top: 6px; }
+    .credit { color: var(--muted); font-size: 11px; margin-top: 8px; }
+    .credit a { color: inherit; }
+    .popup h3 { margin: 0 0 4px; font-size: 14px; }
+    .popup table { border-collapse: collapse; font-size: 12px; }
+    .popup td { padding: 1px 6px 1px 0; vertical-align: top; }
+    .popup .old { color: var(--critical); font-weight: 600; }
+    #toggle { display: none; }
+    @media (max-width: 600px) {
+      .panel { left: 8px; right: 8px; top: 8px; width: auto; max-height: 60%; }
+      .panel.collapsed .body { display: none; }
+      #toggle { display: inline; float: right; border: 0; background: none; font-size: 13px; color: var(--rain); cursor: pointer; }
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <div class="panel" id="panel">
+    <button id="toggle" type="button">ซ่อน</button>
+    <h1>🌊 แผนที่น้ำ</h1>
+    <div class="meta" id="meta">กำลังโหลด…</div>
+    <div class="body">
+      <select id="area" aria-label="เลือกพื้นที่">
+        <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option>
+        <option value="">ทั้งประเทศ</option>
+      </select>
+
+      <div class="section" id="roadsSection">
+        <b id="roadsTitle">🚧 ถนนน้ำท่วมตอนนี้</b>
+        <div class="list" id="roadList"></div>
+      </div>
+
+      <div class="section">
+        <label><input type="checkbox" id="showRoads" checked> น้ำบนถนน (sensor สำนักการระบายน้ำ)</label>
+        <label><input type="checkbox" id="showCanals" checked> ระดับน้ำคลอง (สำนักการระบายน้ำ)</label>
+        <label><input type="checkbox" id="showRivers" checked> ระดับน้ำแม่น้ำ สสน. (ทั้งประเทศ)</label>
+        <label><input type="checkbox" id="showRain" checked> ฝนสะสม 24 ชม. (ทั้งประเทศ เฉพาะจุดที่ฝนตก)</label>
+        <label><input type="checkbox" id="hideStale" checked> ซ่อนจุดวัดที่ offline / ข้อมูลเก่า</label>
+      </div>
+
+      <div class="section legend">
+        <div><span class="road-icon" style="background:var(--critical)">20</span> ถนนน้ำท่วม &gt;10 ซม. (ตัวเลข = ซม.)</div>
+        <div><span class="road-icon" style="background:var(--warning)">10</span> ถนนน้ำท่วมเล็กน้อย 5–10 ซม.</div>
+        <div><span class="dot" style="background:var(--normal)"></span> คลอง/ถนน ปกติ</div>
+        <div><span class="dot" style="background:var(--warning)"></span> คลองเกินระดับเฝ้าระวัง</div>
+        <div><span class="dot" style="background:var(--critical)"></span> คลองถึงระดับวิกฤต / ล้นตลิ่ง</div>
+        <div><span class="dot" style="background:var(--stale)"></span> offline / ข้อมูลเก่า / ไม่มีเกณฑ์</div>
+        <div><span class="sq" style="background:var(--critical)"></span> สถานีแม่น้ำ สสน. (สี่เหลี่ยม สีตามสถานะ)</div>
+        <div><span class="dot" style="background:#9ecae1"></span> ฝนเล็กน้อย &lt;10 มม.</div>
+        <div><span class="dot" style="background:#4292c6"></span> ฝนปานกลาง 10–35 มม.</div>
+        <div><span class="dot" style="background:#08519c"></span> ฝนหนัก 35–90 มม.</div>
+        <div><span class="dot" style="background:#7b2cbf"></span> ฝนหนักมาก &gt;90 มม.</div>
+      </div>
+
+      <div class="section">
+        <b id="canalTitle">⚠️ จุดที่ต้องระวัง</b>
+        <div class="list" id="alerts"></div>
+      </div>
+
+      <div class="section">
+        <b id="rainTitle">🌧 ฝนหนักสุด 24 ชม.</b>
+        <div class="list" id="rainList"></div>
+      </div>
+
+      <div class="err" id="err"></div>
+      <div class="credit">
+        ข้อมูลคลองและถนน: สำนักการระบายน้ำ กรุงเทพมหานคร ผ่าน <a href="https://flood.pop.in.th" target="_blank" rel="noopener">POPNIX Flood</a> ·
+        ระดับน้ำและฝน: สถาบันสารสนเทศทรัพยากรน้ำ (สสน.) · ไม่ใช่ประกาศเตือนภัยทางการ
+        ค่าที่แสดงเป็นของจุดวัดเท่านั้น พื้นที่ที่ไม่มีจุดวัดไม่ได้แปลว่าไม่มีน้ำ
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script>
+    const REFRESH_MS = 5 * 60 * 1000;
+    const COLORS = { normal: '#2e9e5b', warning: '#e8a317', critical: '#d63a3a', unknown: '#9aa0a6', stale: '#9aa0a6' };
+    const CANAL_TH = { normal: 'ปกติ', warning: 'เกินระดับเฝ้าระวัง', critical: 'ถึงระดับวิกฤต', unknown: 'ไม่มีเกณฑ์' };
+    const ROAD_TH = { normal: 'แห้ง', warning: 'ท่วมเล็กน้อย', critical: 'น้ำท่วม', unknown: 'sensor offline' };
+    const TREND = { up: '▲ เพิ่มขึ้น', down: '▼ ลดลง', flat: '— ทรงตัว' };
+    const BANGKOK = 'กรุงเทพมหานคร';
+    const THAILAND = [[5.6, 97.3], [20.5, 105.7]];
+    const MAX_ALERTS = 60;
+    // Thai Meteorological Department 24-hour rainfall bands.
+    const rainColor = mm => mm > 90 ? '#7b2cbf' : mm > 35 ? '#08519c' : mm >= 10 ? '#4292c6' : '#9ecae1';
+
+    // Canvas renderer keeps thousands of nationwide circle markers smooth.
+    const map = L.map('map', { zoomControl: false, preferCanvas: true }).setView([13.7563, 100.5518], 11);
+    L.control.zoom({ position: 'bottomright' }).addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors | ข้อมูล: สำนักการระบายน้ำ กทม. ผ่าน <a href="https://flood.pop.in.th">POPNIX Flood</a>, สสน.'
+    }).addTo(map);
+
+    // Order matters: later layers draw on top.
+    const layers = { rain: L.layerGroup(), canals: L.layerGroup(), rivers: L.layerGroup(), roads: L.layerGroup() };
+    const markerById = new Map();
+    let lastData = null;
+    let area = BANGKOK;
+    try { area = localStorage.getItem('flood-area') ?? BANGKOK; } catch { }
+
+    // Canal and road sensors exist only in Bangkok; ThaiWater stations carry a province name.
+    const inArea = s => !area || (s.province ?? BANGKOK) === area;
+    const bangkokInArea = () => !area || area === BANGKOK;
+
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const fmt = (v, unit, digits = 2) => v == null ? '–' : `${Number(v).toFixed(digits)} ${unit}`;
+    const fmtTime = t => t ? new Date(t).toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'short', timeZone: 'Asia/Bangkok' }) : '–';
+    const colorOf = s => s.isStale ? COLORS.stale : COLORS[s.status] ?? COLORS.unknown;
+    const timeRow = s => `<tr><td>เวลาวัด</td><td class="${s.isStale ? 'old' : ''}">${fmtTime(s.measuredAt)}${s.isStale ? ' (offline / ข้อมูลเก่า)' : ''}</td></tr>`;
+    const isFlooded = r => !r.isStale && (r.status === 'warning' || r.status === 'critical');
+    const depthText = r => r.depthCm == null ? '–' : `${Math.round(r.depthCm)}`;
+
+    function roadPopup(r) {
+      return `<div class="popup"><h3>${r.isTunnel ? '🚇' : '🛣'} ${esc(r.name)}</h3><table>
+        <tr><td>เขต</td><td>${esc(r.district)}</td></tr>
+        <tr><td>น้ำบนถนน</td><td><b>${fmt(r.depthCm, 'ซม.', 0)}</b></td></tr>
+        <tr><td>สถานะ</td><td>${ROAD_TH[r.status] ?? r.status}</td></tr>
+        ${r.floodingSince && isFlooded(r) ? `<tr><td>ท่วมตั้งแต่</td><td>${fmtTime(r.floodingSince)}</td></tr>` : ''}
+        ${r.maxDepthCm != null && isFlooded(r) ? `<tr><td>ลึกสุดรอบนี้</td><td>${fmt(r.maxDepthCm, 'ซม.', 0)}</td></tr>` : ''}
+        ${r.note ? `<tr><td>หมายเหตุ</td><td>${esc(r.note)}</td></tr>` : ''}
+        ${timeRow(r)}</table></div>`;
+    }
+
+    function canalPopup(s) {
+      return `<div class="popup"><h3>${esc(s.name)}</h3><table>
+        <tr><td>คลอง</td><td>${esc(s.canal)}</td></tr>
+        <tr><td>ระดับน้ำ</td><td><b>${fmt(s.value, 'ม.รทก.')}</b> ${s.trend ? TREND[s.trend] ?? '' : ''}</td></tr>
+        <tr><td>เฝ้าระวัง</td><td>${fmt(s.warningLevel, 'ม.รทก.')}</td></tr>
+        <tr><td>วิกฤต</td><td>${fmt(s.criticalLevel, 'ม.รทก.')}</td></tr>
+        <tr><td>ตลิ่ง</td><td>${fmt(s.bankLevel, 'ม.รทก.')}</td></tr>
+        <tr><td>เทียบเมื่อวาน</td><td>${s.deltaDay == null ? '–' : (s.deltaDay > 0 ? '+' : '') + s.deltaDay.toFixed(2) + ' ม.'}</td></tr>
+        <tr><td>สถานะ</td><td>${CANAL_TH[s.status] ?? s.status}</td></tr>
+        ${timeRow(s)}</table></div>`;
+    }
+
+    function riverPopup(s) {
+      return `<div class="popup"><h3>${esc(s.name)}</h3><table>
+        <tr><td>อำเภอ/เขต</td><td>${esc(s.district)}, ${esc(s.province)}</td></tr>
+        <tr><td>ระดับน้ำ</td><td><b>${fmt(s.waterLevelMsl, 'ม.รทก.')}</b></td></tr>
+        <tr><td>% ความจุลำน้ำ</td><td>${s.bankPercent == null ? '–' : s.bankPercent.toFixed(1) + '%'}</td></tr>
+        <tr><td>สถานะ</td><td>${s.status === 'critical' ? 'ล้นตลิ่ง' : CANAL_TH[s.status] ?? s.status}</td></tr>
+        ${timeRow(s)}</table></div>`;
+    }
+
+    function rainPopup(s) {
+      return `<div class="popup"><h3>🌧 ${esc(s.name)}</h3><table>
+        <tr><td>อำเภอ/เขต</td><td>${esc(s.district)}, ${esc(s.province)}</td></tr>
+        <tr><td>ฝน 1 ชม.</td><td>${fmt(s.rain1h, 'มม.', 1)}</td></tr>
+        <tr><td>ฝน 24 ชม.</td><td><b>${fmt(s.rain24h, 'มม.', 1)}</b></td></tr>
+        ${timeRow(s)}</table></div>`;
+    }
+
+    const diamondIcon = color => L.divIcon({
+      className: '',
+      html: `<span class="sq" style="background:${color};width:13px;height:13px"></span>`,
+      iconSize: [17, 17], iconAnchor: [8, 8]
+    });
+
+    const roadIcon = r => L.divIcon({
+      className: '',
+      html: `<span class="road-icon" style="background:${colorOf(r)}">${depthText(r)}</span>`,
+      iconSize: [24, 18], iconAnchor: [12, 9]
+    });
+
+    function render() {
+      if (!lastData) return;
+      const hideStale = document.getElementById('hideStale').checked;
+      Object.values(layers).forEach(l => l.clearLayers());
+      markerById.clear();
+
+      // Only stations that recorded rain; heaviest drawn last so they stay on top.
+      const raining = lastData.rain.filter(s => (s.rain24h ?? 0) > 0 && !(hideStale && s.isStale))
+        .sort((a, b) => a.rain24h - b.rain24h);
+      for (const s of raining) {
+        const m = L.circleMarker([s.lat, s.lng], {
+          radius: 3 + Math.min(s.rain24h, 120) / 12, color: '#fff', weight: 0.5,
+          fillColor: s.isStale ? COLORS.stale : rainColor(s.rain24h), fillOpacity: 0.8
+        }).bindPopup(rainPopup(s)).addTo(layers.rain);
+        markerById.set('n' + s.id, m);
+      }
+
+      const order = { unknown: 0, normal: 1, warning: 2, critical: 3 };
+      const byStatus = (a, b) => (b.isStale - a.isStale) || (order[a.status] - order[b.status]);
+
+      for (const s of [...lastData.canals].sort(byStatus)) {
+        if (hideStale && s.isStale) continue;
+        const m = L.circleMarker([s.lat, s.lng], {
+          radius: s.isStale ? 4 : 6, color: '#fff', weight: 1.5,
+          fillColor: colorOf(s), fillOpacity: 0.95
+        }).bindPopup(canalPopup(s)).addTo(layers.canals);
+        markerById.set('c' + s.id, m);
+      }
+
+      for (const s of lastData.rivers) {
+        if (hideStale && s.isStale) continue;
+        const m = L.marker([s.lat, s.lng], { icon: diamondIcon(colorOf(s)) })
+          .bindPopup(riverPopup(s)).addTo(layers.rivers);
+        markerById.set('r' + s.id, m);
+      }
+
+      // Dry road sensors are small dots; flooded ones get a labelled depth badge on top.
+      for (const r of [...lastData.roads].sort(byStatus)) {
+        if (hideStale && r.isStale) continue;
+        const m = isFlooded(r)
+          ? L.marker([r.lat, r.lng], { icon: roadIcon(r), zIndexOffset: 1000 })
+          : L.circleMarker([r.lat, r.lng], { radius: 3.5, color: '#fff', weight: 1, fillColor: colorOf(r), fillOpacity: 0.9 });
+        m.bindPopup(roadPopup(r)).addTo(layers.roads);
+        markerById.set('w' + r.code, m);
+      }
+
+      renderLists();
+    }
+
+    function renderLists() {
+      document.getElementById('roadsSection').style.display = bangkokInArea() ? '' : 'none';
+      renderRoadList();
+      renderAlerts();
+      renderRainList();
+    }
+
+    function focus(key) {
+      const m = markerById.get(key);
+      if (!m) return;
+      map.setView(m.getLatLng(), 16);
+      m.openPopup();
+    }
+
+    function bindList(box) {
+      box.querySelectorAll('a').forEach(a => a.addEventListener('click', e => {
+        e.preventDefault();
+        focus(a.dataset.key);
+      }));
+    }
+
+    function renderRoadList() {
+      const flooded = lastData.roads.filter(isFlooded)
+        .sort((a, b) => (b.depthCm ?? 0) - (a.depthCm ?? 0) || a.district.localeCompare(b.district, 'th'));
+      document.getElementById('roadsTitle').textContent = `🚧 ถนนน้ำท่วมตอนนี้ ${flooded.length} จุด`;
+      const box = document.getElementById('roadList');
+      if (!flooded.length) { box.innerHTML = '<div class="empty">✅ ไม่มี sensor บนถนนที่วัดน้ำท่วมได้ตอนนี้</div>'; return; }
+      box.innerHTML = flooded.map(r =>
+        `<a href="#" data-key="w${esc(r.code)}">
+          <span class="road-icon" style="background:${COLORS[r.status]}">${depthText(r)}</span>
+          <span>${esc(r.name)} <small>(${esc(r.district)})</small></span>
+          <span class="depth">${depthText(r)} ซม.</span></a>`).join('');
+      bindList(box);
+    }
+
+    function renderAlerts() {
+      const watch = s => !s.isStale && (s.status === 'warning' || s.status === 'critical');
+      const items = [
+        ...lastData.rivers.filter(s => watch(s) && inArea(s))
+          .map(s => ({ ...s, key: 'r' + s.id, sub: area ? s.district : `${s.district}, ${s.province}` })),
+        ...(bangkokInArea() ? lastData.canals.filter(watch).map(s => ({ ...s, key: 'c' + s.id, sub: s.canal })) : []),
+      ].sort((a, b) => (b.status === 'critical') - (a.status === 'critical'));
+
+      document.getElementById('canalTitle').textContent = `⚠️ จุดที่ต้องระวัง ${items.length} จุด`;
+      const box = document.getElementById('alerts');
+      if (!items.length) { box.innerHTML = '<div class="empty">✅ ไม่มีจุดเกินระดับเฝ้าระวัง</div>'; return; }
+      box.innerHTML = items.slice(0, MAX_ALERTS).map(s =>
+        `<a href="#" data-key="${s.key}"><span class="dot" style="background:${COLORS[s.status]}"></span>
+          <span>${esc(s.name)} <small>(${esc(s.sub)})</small></span>
+          ${s.trend === 'up' ? '<span class="depth" title="ระดับน้ำเพิ่มขึ้น">▲</span>' : ''}</a>`).join('') +
+        (items.length > MAX_ALERTS ? `<div class="more">…และอีก ${items.length - MAX_ALERTS} จุด (เลือกจังหวัดเพื่อดูเฉพาะพื้นที่)</div>` : '');
+      bindList(box);
+    }
+
+    function renderRainList() {
+      const top = lastData.rain.filter(s => !s.isStale && (s.rain24h ?? 0) > 0 && inArea(s))
+        .sort((a, b) => b.rain24h - a.rain24h).slice(0, 10);
+      const box = document.getElementById('rainList');
+      if (!top.length) { box.innerHTML = '<div class="empty">☀️ ไม่มีฝนใน 24 ชม. ที่ผ่านมา</div>'; return; }
+      box.innerHTML = top.map(s =>
+        `<a href="#" data-key="n${s.id}"><span class="dot" style="background:${rainColor(s.rain24h)}"></span>
+          <span>${esc(s.name)} <small>(${esc(area ? s.district : s.province)})</small></span>
+          <span class="depth">${s.rain24h.toFixed(1)} มม.</span></a>`).join('');
+      bindList(box);
+    }
+
+    function renderAreaOptions() {
+      const select = document.getElementById('area');
+      const provinces = [...new Set([...lastData.rivers, ...lastData.rain].map(s => s.province).filter(Boolean))]
+        .filter(p => p !== BANGKOK).sort((a, b) => a.localeCompare(b, 'th'));
+      if (select.options.length === provinces.length + 2) return;
+      select.innerHTML = `<option value="${BANGKOK}">${BANGKOK}</option><option value="">ทั้งประเทศ</option>` +
+        provinces.map(p => `<option value="${esc(p)}">${esc(p)}</option>`).join('');
+      select.value = area;
+      if (select.value !== area) { area = BANGKOK; select.value = area; }
+    }
+
+    function zoomToArea() {
+      // Keep the fitted area clear of the side panel on wide screens.
+      const wide = window.innerWidth > 600;
+      const fit = { paddingTopLeft: [wide ? 350 : 20, 20], paddingBottomRight: [20, 20], maxZoom: 12 };
+      if (!area) { map.fitBounds(THAILAND, fit); return; }
+      const points = [...lastData.rivers, ...lastData.rain].filter(inArea).map(s => [s.lat, s.lng]);
+      if (area === BANGKOK) points.push(...lastData.roads.map(s => [s.lat, s.lng]));
+      if (points.length) map.fitBounds(L.latLngBounds(points), fit);
+    }
+
+    function renderMeta() {
+      const d = lastData;
+      const fresh = arr => arr.filter(s => !s.isStale).length;
+      document.getElementById('meta').innerHTML =
+        `อัปเดตล่าสุด: ${fmtTime(d.refreshedAt)}<br>` +
+        `จุดวัดที่ออนไลน์: ถนน กทม. ${fresh(d.roads)}/${d.roads.length} · คลอง กทม. ${fresh(d.canals)}/${d.canals.length} · ` +
+        `แม่น้ำ ${fresh(d.rivers)}/${d.rivers.length} · ฝน ${fresh(d.rain)}/${d.rain.length}`;
+      const errors = (d.sources || []).filter(s => s.lastError);
+      document.getElementById('err').textContent = errors.length
+        ? 'ดึงข้อมูลไม่สำเร็จ: ' + errors.map(s => s.name).join(', ') + ' (แสดงข้อมูลล่าสุดที่มี)'
+        : '';
+    }
+
+    async function load() {
+      try {
+        const res = await fetch('/api/flood', { cache: 'no-store' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        lastData = await res.json();
+        if (!lastData.refreshedAt) {
+          document.getElementById('meta').textContent = 'เซิร์ฟเวอร์กำลังดึงข้อมูลครั้งแรก…';
+          setTimeout(load, 3000);
+          return;
+        }
+        document.getElementById('err').textContent = '';
+        const firstLoad = !document.getElementById('area').dataset.ready;
+        renderAreaOptions();
+        renderMeta();
+        render();
+        if (firstLoad) {
+          document.getElementById('area').dataset.ready = '1';
+          if (area !== BANGKOK) zoomToArea();
+        }
+      } catch (e) {
+        document.getElementById('err').textContent = 'เชื่อมต่อ API ไม่ได้: ' + e.message;
+      }
+    }
+
+    function syncLayer(id, layer) {
+      const box = document.getElementById(id);
+      const apply = () => box.checked ? layer.addTo(map) : map.removeLayer(layer);
+      box.addEventListener('change', apply);
+      apply();
+    }
+    syncLayer('showRain', layers.rain);
+    syncLayer('showCanals', layers.canals);
+    syncLayer('showRivers', layers.rivers);
+    syncLayer('showRoads', layers.roads);
+    document.getElementById('hideStale').addEventListener('change', render);
+    document.getElementById('area').addEventListener('change', e => {
+      area = e.target.value;
+      try { localStorage.setItem('flood-area', area); } catch { }
+      if (!lastData) return;
+      renderLists();
+      zoomToArea();
+    });
+    document.getElementById('toggle').addEventListener('click', () => {
+      const p = document.getElementById('panel');
+      p.classList.toggle('collapsed');
+      document.getElementById('toggle').textContent = p.classList.contains('collapsed') ? 'แสดง' : 'ซ่อน';
+    });
+
+    load();
+    setInterval(load, REFRESH_MS);
+  </script>
+</body>
+</html>

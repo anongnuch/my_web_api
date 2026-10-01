@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "flood_api",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": ["run", "--project", "flood_api", "--launch-profile", "flood_api"],
+      "port": 5180
+    }
+  ]
+}

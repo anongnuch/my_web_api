@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "stock_api", "stock_api\stoc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "stock_api.Tests", "stock_api.Tests\stock_api.Tests.csproj", "{C6D4B178-7EB1-400C-A912-A0868ED99D8A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "flood_api", "flood_api\flood_api.csproj", "{FF5A6FA8-C0B8-4F04-918F-D313DDA83F32}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{C6D4B178-7EB1-400C-A912-A0868ED99D8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6D4B178-7EB1-400C-A912-A0868ED99D8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6D4B178-7EB1-400C-A912-A0868ED99D8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF5A6FA8-C0B8-4F04-918F-D313DDA83F32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF5A6FA8-C0B8-4F04-918F-D313DDA83F32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF5A6FA8-C0B8-4F04-918F-D313DDA83F32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF5A6FA8-C0B8-4F04-918F-D313DDA83F32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
